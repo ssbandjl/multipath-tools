@@ -40,7 +40,7 @@ pthread_create(&check_thr, &misc_attr, checkerloop, vecs)
   check_path (struct vectors * vecs, struct path * pp, unsigned int ticks)
     conf = get_multipath_config()
     newstate = path_offline(pp)
-    sysfs_attr_get_value(parent, "state", buff, sizeof(buff)) -> 通过udev读路径状态
+    sysfs_attr_get_value(parent, "state", buff, sizeof(buff)) -> 通过udev读路径状态,  cat /sys/devices/platform/host15/session2/target15:0:0/15:0:0:1/state -> offline
     fail_path (struct path * pp, int del_active)
       condlog(2, "checker failed path %s in map %s" -> checker failed path
       dm_fail_path(pp->mpp->alias, pp->dev_t)
@@ -71,4 +71,111 @@ multipaths {
 
 
 
+
+gdb 调试信息, debuginfo-install  device-mapper, 
+
+udev rule: /usr/lib/udev/rules.d/62-multipath.rules
+(gdb) p * (struct udev_device *) 0x555555799b40
+$4 = {
+  udev = 0x555555769210, 
+  parent_device = 0x55555579a460, 
+  syspath = 0x555555799d10 "/sys/devices/platform/host15/session2/target15:0:0/15:0:0:1", 
+  devpath = 0x555555799d14 "/devices/platform/host15/session2/target15:0:0/15:0:0:1", 
+  sysname = 0x55555579a010 "15:0:0:1", 
+  sysnum = 0x55555579a017 "1", 
+  devnode = 0x0, 
+  devnode_mode = 0, 
+  devnode_uid = 0, 
+  devnode_gid = 0, 
+  subsystem = 0x55555579a030 "scsi", 
+  devtype = 0x55555579a6a0 "scsi_device", 
+  driver = 0x0, 
+  action = 0x0, 
+  devpath_old = 0x0, 
+  id_filename = 0x0, 
+  envp = 0x0, 
+  monitor_buf = 0x0, 
+  monitor_buf_len = 0, 
+---Type <return> to continue, or q <return> to quit---
+  devlinks_list = {
+    udev = 0x555555769210, 
+    node = {
+      next = 0x555555799bd8, 
+      prev = 0x555555799bd8
+    }, 
+    entries = 0x0, 
+    entries_cur = 0, 
+    entries_max = 0, 
+    unique = true
+  }, 
+  properties_list = {
+    udev = 0x555555769210, 
+    node = {
+      next = 0x555555799d60, 
+      prev = 0x55555579a050
+    }, 
+    entries = 0x555555799e00, 
+    entries_cur = 5, 
+    entries_max = 64, 
+---Type <return> to continue, or q <return> to quit---
+    unique = true
+  }, 
+  sysattr_value_list = {
+    udev = 0x555555769210, 
+    node = {
+      next = 0x55555579a360, 
+      prev = 0x55555579a0d0
+    }, 
+    entries = 0x55555579a150, 
+    entries_cur = 5, 
+    entries_max = 64, 
+    unique = true
+  }, 
+  sysattr_list = {
+    udev = 0x555555769210, 
+    node = {
+      next = 0x555555799c68, 
+      prev = 0x555555799c68
+    }, 
+    entries = 0x0, 
+---Type <return> to continue, or q <return> to quit---
+    entries_cur = 0, 
+    entries_max = 0, 
+    unique = false
+  }, 
+  tags_list = {
+    udev = 0x555555769210, 
+    node = {
+      next = 0x555555799c98, 
+      prev = 0x555555799c98
+    }, 
+    entries = 0x0, 
+    entries_cur = 0, 
+    entries_max = 0, 
+    unique = true
+  }, 
+  seqnum = 0, 
+  usec_initialized = 0, 
+  devlink_priority = 0, 
+  refcount = 1, 
+  devnum = 0, 
+---Type <return> to continue, or q <return> to quit---
+  ifindex = 0, 
+  watch_handle = -1, 
+  maj = 0, 
+  min = 0, 
+  parent_set = true, 
+  subsystem_set = true, 
+  devtype_set = true, 
+  devlinks_uptodate = false, 
+  envp_uptodate = false, 
+  tags_uptodate = false, 
+  driver_set = false, 
+  info_loaded = false, 
+  db_loaded = false, 
+  uevent_loaded = true, 
+  is_initialized = false, 
+  sysattr_list_read = false, 
+  db_persist = false
+}
 
